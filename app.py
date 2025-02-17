@@ -1,6 +1,7 @@
 import requests
 from flask import Flask, request, jsonify
 from llmproxy import generate
+import os
 
 app = Flask(__name__)
 
@@ -37,7 +38,7 @@ def main():
     # Send response back
     print(response_text)
 
-    return jsonify({"text": response_text})
+    return jsonify({"text": response_text, "endPoint": os.environ.get("endPoint") })
     
 @app.errorhandler(404)
 def page_not_found(e):
