@@ -39,7 +39,7 @@ def main():
     # Send response back
     print(response_text)
 
-    return jsonify({"text": response_text})
+    return {"text": response_text}
     
 @app.errorhandler(404)
 def page_not_found(e):
