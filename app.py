@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST'])
 def hello_world():
-   return jsonify({"text":'Hello from Koyeb - you reached the main page!'})
+   return {"text":'Hello from Koyeb - you reached the main page!'}
 
 @app.route('/query', methods=['POST'])
 def main():
@@ -29,7 +29,7 @@ def main():
 
     # Ignore bot messages
     if data.get("bot") or not message:
-        return jsonify({"status": "ignored"})
+        return {"status": "ignored"}
 
     # MAIN FUNCTIONALITY OF THE BOT
     
