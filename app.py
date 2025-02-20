@@ -47,7 +47,7 @@ def main():
                     The user might have asked a query related to something other
                     than advising. Answers the users query, but make sure to
                     mention at the end that you are an advising chatbot and can
-                    help with the following:
+                    help with the following (list them in bullet points):
                     - Immigration and Visa Assistance: Guidance on obtaining and
                     maintaining valid U.S. immigration status.
                     - Orientation Programs: Initiatives designed to ease your
