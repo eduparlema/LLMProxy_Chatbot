@@ -62,7 +62,8 @@ def AI_agent(user, user_message):
                 center website. Make sure that your answers are based on this 
                 context and with some of your own intelligency too!
                 Take into account that the user's username is {user}. This is 
-                formated by [name].[lastname]. Use this information if applicable!
+                formated by [name].[lastname]. Use this information if the user
+                greets you.
 
                 Break down the user's query as follows:
 
@@ -72,9 +73,8 @@ def AI_agent(user, user_message):
 
                 - Second, determine if you strictly need more information from
                 the user to be able to answer the user's query accurately. If the
-                answer to a query will vary A LOT depending on the user's situation.
-                Then ask him a question about it. Note that this should be done
-                only if you strictly need extra information, not for every query.
+                answer to a query will vary depending on the user's situation.
+                Then ask him a question about it.
                 If you decide to ask questions to the user, make them at the
                 end of your response and after that, attach the token $$INFO$$
 
