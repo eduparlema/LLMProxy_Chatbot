@@ -73,8 +73,10 @@ def AI_agent(user, user_message):
                 Avoid giving generalized answers that are available in the context.
                 That is, prioritize asking questions to the user so that you can
                 provide with a tailored answer rather than giving a general answer.
-                If you decide to ask questions to the user, ask those questions
-                at the end of your response and after that, attach the token $$INFO$$
+                If you decide to ask questions to the user, let the user know
+                you need additional information to answer accurately, and ask
+                the questions you need to know. Then, after asking the questions,
+                end your response with $$INFO$$.
 
                 For example: you may need to know the user's last name and in which
                 program he/she is to help him/her find his/her advisor. Or you
