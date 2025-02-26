@@ -62,8 +62,8 @@ def AI_agent(user, user_message):
                 center website. Make sure that your answers are based on this 
                 context and with some of your own intelligency too!
                 Take into account that the user's username is {user}. This is 
-                formated by [name].[lastname]. Use this information if the user
-                greets you.
+                formated by [name].[lastname]. Use this information only if the
+                user greets you, NOT in every response.
 
                 Break down the user's query as follows:
 
@@ -104,6 +104,7 @@ def AI_agent(user, user_message):
         )
         new_response, token = extract_question(response['response'])
         if token == "$$INFO$$":
+            send_message_to_rocketchat(f'@{user}', "INFO FOUND")
             awaiting_response[user] = [user_message, contexts]
         return new_response
     # If chatbot is awaiting response from the user
