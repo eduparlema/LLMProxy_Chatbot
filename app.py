@@ -45,106 +45,64 @@ def page_not_found(e):
     return "Not Found", 404
 
 def AI_agent(user, user_message):
-    if user not in awaiting_response:
-        system= f"""
-                You are an AI agent designed to handle queries from international
-                students at Tufts University. Specifically, you can support students
-                with the following:
-                    - Immigration and Visa Assistance: Guidance on obtaining and 
-                    maintaining valid U.S. immigration status.
-                    - Orientation Programs: Initiatives designed to ease your
-                    transition to Tufts and the surrounding community.
-                    - Information about Cultural and Educational Events
-                    - Practical Support: Assistance with everyday matters such as
-                    housing, navigating U.S. systems, and accessing campus resources.
-                
-                You will be given a lot of context from Tuft's international
-                center website. But you prioritize providing the user with
-                very tailored responsed based on his particular situation.
+    system= f"""
+            You are an AI agent designed to handle queries from international
+            students at Tufts University. Specifically, you can support students
+            with the following:
+                - Immigration and Visa Assistance: Guidance on obtaining and 
+                maintaining valid U.S. immigration status.
+                - Orientation Programs: Initiatives designed to ease your
+                transition to Tufts and the surrounding community.
+                - Information about Cultural and Educational Events
+                - Practical Support: Assistance with everyday matters such as
+                housing, navigating U.S. systems, and accessing campus resources.
+                - Make appointments with your advisor.
+            
+            You will be given a lot of context from Tuft's international
+            center website. Make sure that your answers are based on this 
+            context and with some of your own intelligency too!
+            Take into account that the user's username is {user}. This is 
+            formated by [name].[lastname]. Use this information to answer a
+            query only if the user greets you.
 
-                Break down the user's query as follows:
+            Break down the user's query as follows:
 
-                - First, determine if the student is asking a specific query concerning
-                the international center. If not, then still reply to the user but
-                at the end emphasize what you can help with.
+            - First, determine if the student is asking a specific query concerning
+            the international center. If not, then still reply to the user but
+            at the end emphasize what you can help with.
 
-                - Second, determine if you need more information about
-                the user to be able to answer the user's query accurately. 
-                Avoid giving generalized answers that are available in the context.
-                That is, prioritize asking questions to the user so that you can
-                provide with a tailored answer rather than giving a general answer.
-                If you decide to ask questions to the user, let the user know
-                you need additional information to answer accurately, and ask
-                the questions you need to know. Then, after asking the questions,
-                end your response with $$INFO$$.
+            - Second, determine if the student's query should be scalated to
+            an icenter advisor. If so, reply only with $$ADVISOR$$. Only do this
+            if you believe the information provided by the user could be 
+            concerning or if you think his case should be discussed with an
+            advisor. For general questions, just provide an answer.
 
-                For example: you may need to know the user's last name and in which
-                program he/she is to help him/her find his/her advisor. Or you
-                may need to know his specific visa status. Or you may want to
-                know if a student already attended an OPT workshop when he asks
-                about applying for an OPT.
-                """
-        
-        # First enhance query for google_search
-        enhanced_query = enhance_query(user_message)
-
-        # Get context from the web
-        contexts = google_search(enhanced_query.strip('"'))
-
-        # Pass context to LLM:
-        response = generate(
-            model= '4o-mini',
-            system=system,
-            query=f"""
-                  Interact with the user/answer his query :{user_message}. Here
-                  is the context available for use: {contexts}. If the answer
-                  is not available in the context make sure to reply with your
-                  own intelligence.
-                  """,
-            temperature=0.1,
-            lastk=3,
-            session_id=f'BOT-EDUARDO_{user}1'
-        )
-        new_response, token = extract_question(response['response'])
-        if token == "$$INFO$$":
-            send_message_to_rocketchat(f'@{user}', "INFO FOUND")
-            awaiting_response[user] = [user_message, contexts]
-        return new_response
-    # If chatbot is awaiting response from the user
-    old_user_message, contexts = awaiting_response[user]
-
-    system= """
-            You are a chatbot that aids another chatbot with advising international
-            students at Tufts University. You will be given a query previously
-            made by a user, plus additional information the user gave related to
-            this question, plust additional context from the web. Using this,
-            you should be able to provide with a more robust response to the user.
-
-            If no useful information is provided in contexts and the additional
-            information from the user, then use your own intelligence to answer
-            the query.
+            - Otherwise reply to the user's query as accurately as possible.
             """
-    response = generate(
-        model='4o-mini',
-        system=system,
-        query=f"""The original query you must answer: {old_user_message}. The information from
-                the web: {contexts}. The additional info from the user: {user_message}""",
-        temperature=0.1,
-        lastk=5,
-        session_id=f'BOT-EDUARDO_{user}1'
-    )
-    # Remove from awaiting_response
-    del awaiting_response[user]
-    return response['response']
     
+    # First enhance query for google_search
+    enhanced_query = enhance_query(user_message)
 
-def extract_question(text):
-    match = re.search(r'\$\$INFO\$\$$', text)
-    if match and text.endswith("$$INFO$$"):
-        question = match.group()
-        text = text[:match.start()].rstrip()
-        return text, question
-    return text, None    
+    # Get context from the web
+    contexts = google_search(enhanced_query.strip('"'))
+
+    # Pass context to LLM:
+    response = generate(
+        model= '4o-mini',
+        system=system,
+        query=f"""
+                Interact with the user/answer his query :{user_message}. Here
+                is the context available for use: {contexts}. If the answer
+                is not available in the context make sure to reply with your
+                own intelligence.
+                """,
+        temperature=0.1,
+        lastk=3,
+        session_id=f'BOT-EDU_{user}1'
+    )
+
+    return response['response']
+  
 
 def answer_query(user, user_message):
     # Enhance students query
