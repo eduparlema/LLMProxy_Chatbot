@@ -13,7 +13,7 @@ headers = {
 
 # Payload (data to be sent)
 payload = {
-    "channel": "@testUser", #Change this to your desired user, for any user it should start with @ then the username
+    "channel": "@eduardo.pareja_lema", #Change this to your desired user, for any user it should start with @ then the username
     "text": "This is a direct message from the bot" #This where you add your message to the user
 }
 
