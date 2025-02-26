@@ -75,8 +75,8 @@ def AI_agent(user, user_message):
                 answer to a query will vary A LOT depending on the user's situation.
                 Then ask him a question about it. Note that this should be done
                 only if you strictly need extra information, not for every query.
-                If you decide to ask questions to the user end your response with
-                the token $$QUESTION$$.
+                If you decide to ask questions to the user, make them at the
+                end of your response and after that, attach the token $$INFO$$
 
                 For example: you may need to know the user's last name and in which
                 program he/she is to help him/her find his/her advisor.
@@ -103,7 +103,7 @@ def AI_agent(user, user_message):
             session_id=f'BOT-EDU_{user}'
         )
         new_response, token = extract_question(response['response'])
-        if token == "$$QUESTION$$":
+        if token == "$$INFO$$":
             awaiting_response[user] = [user_message, contexts]
         return new_response
     # If chatbot is awaiting response from the user
@@ -135,8 +135,8 @@ def AI_agent(user, user_message):
     
 
 def extract_question(text):
-    match = re.search(r'\$\$QUESTION\$\$$', text)
-    if match and text.endswith("$$QUESTION$$"):
+    match = re.search(r'\$\$INFO\$\$$', text)
+    if match and text.endswith("$$INFO$$"):
         question = match.group()
         text = text[:match.start()].rstrip()
         return text, question
