@@ -140,7 +140,7 @@ def AI_agent(user, user_message):
             session_id="GenericSessionID"
         )
 
-        send_message_to_rocketchat(f"@eduardo.pareja_lema", notify_advisor['response'])
+        send_message_to_rocketchat(f"@{user}", notify_advisor['response'])
         return advisor_response['response']
 
 
