@@ -60,7 +60,7 @@ def answer_query(user, user_message):
     if not contexts:
         response = generate(
             model = '4o-mini',
-            system = """
+            system = f"""
                     You are an AI agent designed to handle queries from international
                     students at Tufts University. Specifically, you can support students
                     with the following:
