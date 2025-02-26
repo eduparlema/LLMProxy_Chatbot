@@ -35,16 +35,9 @@ def main():
 
     # MAIN FUNCTIONALITY OF THE BOT
     
-    # response = answer_query(message)
-
-    if user in conversation_state and conversation_state[user] == "awaiting_details":
-        # Process user's additional information
-        del conversation_state[user]
-        response = ""
-        return {"text": response}
-    # If not in a multi-step conversation, ask for more details first 
+    response = answer_query(message)
     
-    return {"text": response}
+    return {"text": response['response']}
     
 @app.errorhandler(404)
 def page_not_found(e):
