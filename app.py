@@ -82,7 +82,7 @@ def answer_query(user, user_message):
             lastk=3,
             session_id=f'BOT-Eduardo_{user}-no-context'
         )
-        return {"text": response['response']}
+        return response
     
     # If useful context found, use it to generate an answer
     response = generate(
