@@ -100,8 +100,49 @@ def AI_agent(user, user_message):
                 """,
         temperature=0.1,
         lastk=3,
-        session_id=f'BOT-EDU_{user}3'
+        session_id=f'BOT-EDU_{user}4'
     )
+
+    if response['response'] == "$$ADVISOR$$":
+        advisor_response = generate(
+            model='4o-mini',
+            system= """
+                    You are a chatbot that aids an AI agent for the international
+                    center at Tufts University. You will be given a query that must
+                    be scalated to an icenter advisor. Given that query, and some
+                    context provided, answer the query but make sure to say that
+                    an icenter advisor will be notified about your situation
+                    and will be in touch shortly.
+                    """,
+            query=f"""This was the original query: {user_message}. This is
+                    the context: {contexts}.
+                    """,
+            temperature=0.0,
+            lastk=0,
+            session_id=f'BOT-EDU_{user}4'
+        )
+        
+        # Send message to advisor
+        notify_advisor = generate(
+            model='4o-mini',
+            system= """
+                    You are a chatbot that aids an AI agent for the international
+                    center at Tufts University. You will be given a query from
+                    a student that must be scalated to an icenter advisor. You
+                    will also be given the username of the student. The username
+                    has the format [name].[lastname]. Your task is the craft a
+                    message for an international advisor explaining the situation
+                    from the student stated in the query.
+                    """,
+            query=f"Student query: {user_message}. Username: {user}",
+            temperature=0.1,
+            lastk=0,
+            session_id="GenericSessionID"
+        )
+
+        send_message_to_rocketchat(f"@eduardo.pareja_lema", notify_advisor['response'])
+        return advisor_response['response']
+
 
     return response['response']
   
