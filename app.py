@@ -35,7 +35,7 @@ def main():
 
     # MAIN FUNCTIONALITY OF THE BOT
     
-    response = answer_query(message)
+    response = answer_query(user, message)
     
     return {"text": response['response']}
     
