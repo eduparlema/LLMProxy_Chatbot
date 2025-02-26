@@ -73,8 +73,8 @@ def AI_agent(user, user_message):
                 Avoid giving generalized answers that are available in the context.
                 That is, prioritize asking questions to the user so that you can
                 provide with a tailored answer rather than giving a general answer.
-                If you decide to ask questions to the user, make them at the
-                end of your response and after that, attach the token $$INFO$$
+                If you decide to ask questions to the user, ask those questions
+                at the end of your response and after that, attach the token $$INFO$$
 
                 For example: you may need to know the user's last name and in which
                 program he/she is to help him/her find his/her advisor. Or you
@@ -101,7 +101,7 @@ def AI_agent(user, user_message):
                   """,
             temperature=0.1,
             lastk=3,
-            session_id=f'BOT-EDUARDO_{user}'
+            session_id=f'BOT-EDUARDO_{user}1'
         )
         new_response, token = extract_question(response['response'])
         if token == "$$INFO$$":
@@ -129,7 +129,7 @@ def AI_agent(user, user_message):
                 the web: {contexts}. The additional info from the user: {user_message}""",
         temperature=0.1,
         lastk=5,
-        session_id=f'BOT-EDUARDO_{user}'
+        session_id=f'BOT-EDUARDO_{user}1'
     )
     # Remove from awaiting_response
     del awaiting_response[user]
