@@ -59,8 +59,7 @@ def AI_agent(user, user_message):
                 - Make appointments with your advisor.
             
             You will be given a lot of context from Tuft's international
-            center website. Make sure that your answers are based on this 
-            context and with some of your own intelligency too!
+            center website.
             Take into account that the user's username is {user}. This is 
             formated by [name].[lastname]. Use this information to answer a
             query only if the user greets you.
@@ -77,7 +76,8 @@ def AI_agent(user, user_message):
             concerning or if you think his case should be discussed with an
             advisor. For example: If a student's visa expired or a student
             might do something to put his visa status at risk, this should be
-            scalated to an advisor.
+            scalated to an advisor. This is very important, if there is a 
+            slight chance of concern, just reply with $$ADVISOR$$ and nothing else.
 
             - Otherwise reply to the user's query as accurately as possible.
             """
@@ -100,7 +100,7 @@ def AI_agent(user, user_message):
                 """,
         temperature=0.1,
         lastk=3,
-        session_id=f'BOT-EDU_{user}2'
+        session_id=f'BOT-EDU_{user}3'
     )
 
     return response['response']
