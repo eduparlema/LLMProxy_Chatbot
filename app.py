@@ -101,7 +101,7 @@ def AI_agent(user, user_message):
                   """,
             temperature=0.1,
             lastk=3,
-            session_id=f'BOT-EDU_{user}'
+            session_id=f'BOT-EDUARDO_{user}'
         )
         new_response, token = extract_question(response['response'])
         if token == "$$INFO$$":
@@ -129,7 +129,7 @@ def AI_agent(user, user_message):
                 the web: {contexts}. The additional info from the user: {user_message}""",
         temperature=0.1,
         lastk=5,
-        session_id=f'BOT-EDU_{user}'
+        session_id=f'BOT-EDUARDO_{user}'
     )
     # Remove from awaiting_response
     del awaiting_response[user]
