@@ -7,7 +7,9 @@ import os
 
 GOOGLE_API_KEY = os.environ.get("googleApiKey")
 SEARCH_ENGINE_ID = os.environ.get("searchEngineId")
-
+ROCKETCHAT_URL = "https://chat.genaiconnect.net/api/v1/chat.postMessage"
+RC_token = os.environ.get("RC_token")
+RC_userId = os.environ.get("RC_userId")
 
 
 
@@ -32,55 +34,65 @@ def main():
         return {"status": "ignored"}
 
     # MAIN FUNCTIONALITY OF THE BOT
+    send_message_to_rocketchat('@eduardo.pareja_lema', 'I am thinking ... ')
     
-    # Enhance students query
-    enhanced_query = enhance_query(message)
-
-    # use the enhanced query to query the Google API
-    contexts = google_search(enhanced_query.strip('"'))
-
-    if not contexts:
-        response = generate(
-            model = '4o-mini',
-            system = """
-                    You are a chatbot that advises international Tufts students.
-                    The user might have asked a query related to something other
-                    than advising. Answers the users query, but make sure to
-                    mention at the end that you are an advising chatbot and can
-                    help with the following (list them in bullet points):
-                    - Immigration and Visa Assistance: Guidance on obtaining and
-                    maintaining valid U.S. immigration status.
-                    - Orientation Programs: Initiatives designed to ease your
-                    transition to Tufts and the surrounding community.
-                    - Information about Cultural and Educational Events
-                    - Practical Support: Assistance with everyday matters such as
-                    housing, navigating U.S. systems, and accessing campus resources.
-                    """,
-            query=message,
-            temperature=0.1,
-            lastk=0,
-            session_id='GenericSessionId'
-        )
-        return {"text": response['response']}
-    
-    # If useful context found, use it to generate an answer
     response = generate(
-        model = '4o-mini',
-        system= """
-                You are an advising chatbot for international Tufts students. You
-                will be provided with a lot of context from the web and a query
-                from the student. You should answer as accurately as possible.
-                Prioritize concise answers over long and confusing ones. Make
-                sure that your answer is based on the context provided. If the 
-                information requires is not in the context, tell the user you are
-                unsure about the answer.
-                """,
-        query= f"Answer the query by a student: {message} basing your answer \
-                with the following information: {contexts}",
-        temperature=0.0,
-        lastk=5,
-        session_id="InternationalJumboSessionTest"
+      model='4o-mini',
+      system='you are a creative bot',
+      query='message',
+      temperature=0.5,
+      lastk=0,
+      session_id='GenericSessionId'  
     )
+    # # Enhance students query
+    # enhanced_query = enhance_query(message)
+
+    # # use the enhanced query to query the Google API
+    # contexts = google_search(enhanced_query.strip('"'))
+
+    # if not contexts:
+    #     response = generate(
+    #         model = '4o-mini',
+    #         system = """
+    #                 You are a chatbot that advises international Tufts students.
+    #                 The user might have asked a query related to something other
+    #                 than advising. Answers the users query, but make sure to
+    #                 mention at the end that you are an advising chatbot and can
+    #                 help with the following (list them in bullet points):
+    #                 - Immigration and Visa Assistance: Guidance on obtaining and
+    #                 maintaining valid U.S. immigration status.
+    #                 - Orientation Programs: Initiatives designed to ease your
+    #                 transition to Tufts and the surrounding community.
+    #                 - Information about Cultural and Educational Events
+    #                 - Practical Support: Assistance with everyday matters such as
+    #                 housing, navigating U.S. systems, and accessing campus resources.
+    #                 """,
+    #         query=message,
+    #         temperature=0.1,
+    #         lastk=0,
+    #         session_id='GenericSessionId'
+    #     )
+    #     return {"text": response['response']}
+    
+    # # If useful context found, use it to generate an answer
+    # response = generate(
+    #     model = '4o-mini',
+    #     system= """
+    #             You are an advising chatbot for international Tufts students. You
+    #             will be provided with a lot of context from the web and a query
+    #             from the student. You should answer as accurately as possible.
+    #             Prioritize concise answers over long and confusing ones. Make
+    #             sure that your answer is based on the context provided. If the 
+    #             information requires is not in the context, tell the user you are
+    #             unsure about the answer.
+    #             """,
+    #     query= f"Answer the query by a student: {message} basing your answer \
+    #             with the following information: {contexts}",
+    #     temperature=0.0,
+    #     lastk=5,
+    #     session_id="InternationalJumboSessionTest"
+    # )
+    
     return {"text": response['response']}
     
 @app.errorhandler(404)
@@ -157,6 +169,24 @@ def enhance_query(query):
         rag_usage=False)
     
     return response['response']
+
+def send_message_to_rocketchat(channel, text):
+    headers = {
+        "X-Auth-Token": RC_token,
+        "X-User-Id": RC_userId,
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "channel": channel,  # Use the channel ID or room name
+        "text": text
+    }
+    
+    response = requests.post(ROCKETCHAT_URL, json=payload, headers=headers)
+    
+    if response.status_code == 200:
+        print("Message sent successfully!")
+    else:
+        print(f"Failed to send message: {response.status_code}, {response.text}")
 
 if __name__ == "__main__":
     app.run()
