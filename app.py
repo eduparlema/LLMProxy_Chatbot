@@ -123,8 +123,8 @@ def AI_agent(user, user_message):
     response = generate(
         model='4o-mini',
         system=system,
-        query=f'The original query you must answer: {old_user_message}. The information from
-                the web: {contexts}. The additional info from the user: {user_message}',
+        query=f"""The original query you must answer: {old_user_message}. The information from
+                the web: {contexts}. The additional info from the user: {user_message}""",
         temperature=0.1,
         lastk=5,
         session_id=f'BOT-EDU_{user}'
