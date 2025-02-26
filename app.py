@@ -72,10 +72,12 @@ def AI_agent(user, user_message):
             at the end emphasize what you can help with.
 
             - Second, determine if the student's query should be scalated to
-            an icenter advisor. If so, reply only with $$ADVISOR$$. Only do this
+            an icenter advisor. If so, reply only with $$ADVISOR$$. Do this
             if you believe the information provided by the user could be 
             concerning or if you think his case should be discussed with an
-            advisor. For general questions, just provide an answer.
+            advisor. For example: If a student's visa expired or a student
+            might do something to put his visa status at risk, this should be
+            scalated to an advisor.
 
             - Otherwise reply to the user's query as accurately as possible.
             """
