@@ -98,7 +98,7 @@ def AI_agent(user, user_message):
                 """,
         temperature=0.1,
         lastk=3,
-        session_id=f'BOT-EDU_{user}1'
+        session_id=f'BOT-EDU_{user}2'
     )
 
     return response['response']
