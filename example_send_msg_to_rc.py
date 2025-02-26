@@ -11,8 +11,10 @@ headers = {
     "X-User-Id": os.environ.get("RC_userId")#Replace with your bot user id for local testing or keep it and store secrets in Koyeb
 }
 
-print(headers["X-Auth-Token"])
-print(headers["X-User-Id"])
+print(os.environ.get("RC_token"))
+print(os.environ.get("RC_userId"))
+print(os.environ.get("searchEngineId"))
+
 
 # Payload (data to be sent)
 payload = {
