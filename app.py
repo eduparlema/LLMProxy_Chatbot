@@ -62,8 +62,8 @@ def AI_agent(user, user_message):
                 center website. Make sure that your answers are based on this 
                 context and with some of your own intelligency too!
                 Take into account that the user's username is {user}. This is 
-                formated by [name].[lastname]. Use this information only if the
-                user greets you, NOT in every response.
+                formated by [name].[lastname]. Use this information to answer a
+                query only if the user greets you.
 
                 Break down the user's query as follows:
 
@@ -71,7 +71,7 @@ def AI_agent(user, user_message):
                 the international center. If not, then still reply to the user but
                 at the end emphasize what you can help with.
 
-                - Second, determine if you strictly need more information from
+                - Second, determine if you need more information about
                 the user to be able to answer the user's query accurately. If the
                 answer to a query will vary depending on the user's situation.
                 Then ask him a question about it.
@@ -79,7 +79,8 @@ def AI_agent(user, user_message):
                 end of your response and after that, attach the token $$INFO$$
 
                 For example: you may need to know the user's last name and in which
-                program he/she is to help him/her find his/her advisor.
+                program he/she is to help him/her find his/her advisor. Or you
+                may need to know his specific visa status.
                 """
         
         # First enhance query for google_search
