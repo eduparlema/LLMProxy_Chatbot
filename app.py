@@ -74,13 +74,17 @@ def AI_agent(user, user_message):
                 - Second, determine if you need more information about
                 the user to be able to answer the user's query accurately. If the
                 answer to a query will vary depending on the user's situation.
-                Then ask him a question about it.
+                Avoid giving generalized answers that are available in the context.
+                That is, prioritize asking questions to the user so that you can
+                provide with a tailored answer rather than giving a general answer.
                 If you decide to ask questions to the user, make them at the
                 end of your response and after that, attach the token $$INFO$$
 
                 For example: you may need to know the user's last name and in which
                 program he/she is to help him/her find his/her advisor. Or you
-                may need to know his specific visa status.
+                may need to know his specific visa status. Or you may want to
+                know if a student already attended an OPT workshop when he asks
+                about applying for an OPT.
                 """
         
         # First enhance query for google_search
