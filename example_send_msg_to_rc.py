@@ -11,6 +11,9 @@ headers = {
     "X-User-Id": os.environ.get("RC_userId")#Replace with your bot user id for local testing or keep it and store secrets in Koyeb
 }
 
+print(headers["X-Auth-Token"])
+print(headers["X-User-Id"])
+
 # Payload (data to be sent)
 payload = {
     "channel": "@eduardo.pareja_lema", #Change this to your desired user, for any user it should start with @ then the username
