@@ -11,9 +11,9 @@ ROCKETCHAT_URL = "https://chat.genaiconnect.net/api/v1/chat.postMessage"
 RC_token = os.environ.get("RC_token")
 RC_userId = os.environ.get("RC_userId")
 
-
-
 app = Flask(__name__)
+
+conversation_state = {} # Store user states, e.g., awaiting for more information
 
 @app.route('/', methods=['POST'])
 def hello_world():
@@ -34,70 +34,81 @@ def main():
         return {"status": "ignored"}
 
     # MAIN FUNCTIONALITY OF THE BOT
-    send_message_to_rocketchat('@eduardo.pareja_lema', 'I am thinking ... ')
     
-    response = generate(
-      model='4o-mini',
-      system='you are a creative bot',
-      query='message',
-      temperature=0.5,
-      lastk=0,
-      session_id='GenericSessionId'  
-    )
-    # # Enhance students query
-    # enhanced_query = enhance_query(message)
+    # response = answer_query(message)
 
-    # # use the enhanced query to query the Google API
-    # contexts = google_search(enhanced_query.strip('"'))
-
-    # if not contexts:
-    #     response = generate(
-    #         model = '4o-mini',
-    #         system = """
-    #                 You are a chatbot that advises international Tufts students.
-    #                 The user might have asked a query related to something other
-    #                 than advising. Answers the users query, but make sure to
-    #                 mention at the end that you are an advising chatbot and can
-    #                 help with the following (list them in bullet points):
-    #                 - Immigration and Visa Assistance: Guidance on obtaining and
-    #                 maintaining valid U.S. immigration status.
-    #                 - Orientation Programs: Initiatives designed to ease your
-    #                 transition to Tufts and the surrounding community.
-    #                 - Information about Cultural and Educational Events
-    #                 - Practical Support: Assistance with everyday matters such as
-    #                 housing, navigating U.S. systems, and accessing campus resources.
-    #                 """,
-    #         query=message,
-    #         temperature=0.1,
-    #         lastk=0,
-    #         session_id='GenericSessionId'
-    #     )
-    #     return {"text": response['response']}
+    if user in conversation_state and conversation_state[user] == "awaiting_details":
+        # Process user's additional information
+        del conversation_state[user]
+        response = ""
+        return {"text": response}
+    # If not in a multi-step conversation, ask for more details first 
     
-    # # If useful context found, use it to generate an answer
-    # response = generate(
-    #     model = '4o-mini',
-    #     system= """
-    #             You are an advising chatbot for international Tufts students. You
-    #             will be provided with a lot of context from the web and a query
-    #             from the student. You should answer as accurately as possible.
-    #             Prioritize concise answers over long and confusing ones. Make
-    #             sure that your answer is based on the context provided. If the 
-    #             information requires is not in the context, tell the user you are
-    #             unsure about the answer.
-    #             """,
-    #     query= f"Answer the query by a student: {message} basing your answer \
-    #             with the following information: {contexts}",
-    #     temperature=0.0,
-    #     lastk=5,
-    #     session_id="InternationalJumboSessionTest"
-    # )
-    
-    return {"text": response['response']}
+    return {"text": response}
     
 @app.errorhandler(404)
 def page_not_found(e):
     return "Not Found", 404
+
+def answer_query(user, user_message):
+    # Enhance students query
+    enhanced_query = enhance_query(user_message)
+
+    # use the enhanced query to query the Google API
+    contexts = google_search(enhanced_query.strip('"'))
+
+    if not contexts:
+        response = generate(
+            model = '4o-mini',
+            system = """
+                    You are an AI agent designed to handle queries from international
+                    students at Tufts University. Specifically, you can support students
+                    with the following:
+                        - Immigration and Visa Assistance: Guidance on obtaining and 
+                        maintaining valid U.S. immigration status.
+                        - Orientation Programs: Initiatives designed to ease your
+                        transition to Tufts and the surrounding community.
+                        - Information about Cultural and Educational Events
+                        - Practical Support: Assistance with everyday matters such as
+                        housing, navigating U.S. systems, and accessing campus resources.
+                    
+                    Take into account that the user's username is {user}. This is 
+                    formated by [name].[lastname]. Use this information if applicable!
+                    Reply to the user's query, but make sure to emphasize at the
+                    end what you can help with specifically.
+                    """,
+            query=user_message,
+            temperature=0.1,
+            lastk=3,
+            session_id=f'BOT-Eduardo_{user}-no-context'
+        )
+        return {"text": response['response']}
+    
+    # If useful context found, use it to generate an answer
+    response = generate(
+        model = '4o-mini',
+        system= """
+                You are an advising chatbot for international Tufts students. You
+                will be provided with a lot of context from the web and a query
+                from the student. You should answer as accurately as possible.
+                Prioritize concise answers over long and confusing ones. Make
+                sure that your answer is based on the context provided.
+
+                Also, determine if the user's query should be scalated to his/her
+                advisor at the international center. If so, at the end of your
+                response include the token $$particular$$. Do NOT add in your
+                response anything related to: If you have a particular question,
+                get in touch with your advisor or I recommend getting in touch
+                with your advisor. This will be taken care of with another tool
+                if you just add the token above.
+                """,
+        query= f"Answer the query by a student: {user_message} basing your answer \
+                with the following information: {contexts}",
+        temperature=0.0,
+        lastk=5,
+        session_id=f'BOT-Eduardo_{user}-context'
+    )
+    return response
 
 def google_search(query, num_results=2):
     """Perform a Google search and return the top results"""
