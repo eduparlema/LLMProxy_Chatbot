@@ -65,15 +65,13 @@ def answer_query(user, user_message):
                         - Practical Support: Assistance with everyday matters such as
                         housing, navigating U.S. systems, and accessing campus resources.
                     
-                    Take into account that the user's username is {user}. This is 
-                    formated by [name].[lastname]. Use this information if applicable!
                     Reply to the user's query, but make sure to emphasize at the
                     end what you can help with specifically.
                     """,
             query=user_message,
             temperature=0.1,
             lastk=3,
-            session_id=f'BOT-Eduardo_{user}-no-context'
+            session_id=f'BOT-Eduardo_{user}'
         )
         return response
     
@@ -87,19 +85,17 @@ def answer_query(user, user_message):
                 Prioritize concise answers over long and confusing ones. Make
                 sure that your answer is based on the context provided.
 
-                Also, determine if the user's query should be scalated to his/her
-                advisor at the international center. If so, at the end of your
-                response include the token $$particular$$. Do NOT add in your
-                response anything related to: If you have a particular question,
-                get in touch with your advisor or I recommend getting in touch
-                with your advisor. This will be taken care of with another tool
-                if you just add the token above.
+                If you feel that you would need additional information to answer
+                the question more accurately, provide some questions that could
+                be asked to the user to deliver a more tailored answer. Format
+                you response as follows: [your response] and at the end
+                $$Question1 Question2 Question3 ...$$
                 """,
         query= f"Answer the query by a student: {user_message} basing your answer \
                 with the following information: {contexts}",
         temperature=0.0,
         lastk=5,
-        session_id=f'BOT-Eduardo_{user}-context'
+        session_id=f'BOT-Eduardo_{user}'
     )
     return response
 
