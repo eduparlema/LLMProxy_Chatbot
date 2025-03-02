@@ -1,12 +1,10 @@
+import os
 import json
 import requests
 
-# Read proxy config from config.json
-with open('config.json', 'r') as file:
-    config = json.load(file)
-
-end_point = config['endPoint']
-api_key = config['apiKey']
+# Read proxy config from environment
+end_point = os.environ.get("endPoint")
+api_key = os.environ.get("apiKey")
 
 def retrieve(
     query: str,
@@ -41,17 +39,17 @@ def retrieve(
     return msg  
 
 def generate(
-	model: str,
-	system: str,
-	query: str,
-	temperature: float | None = None,
-	lastk: int | None = None,
-	session_id: str | None = None,
+    model: str,
+    system: str,
+    query: str,
+    temperature: float | None = None,
+    lastk: int | None = None,
+    session_id: str | None = None,
     rag_threshold: float | None = 0.5,
     rag_usage: bool | None = False,
     rag_k: int | None = 0
-	):
-	
+    ):
+    
 
     headers = {
         'x-api-key': api_key,
@@ -82,7 +80,7 @@ def generate(
             msg = f"Error: Received response code {response.status_code}"
     except requests.exceptions.RequestException as e:
         msg = f"An error occurred: {e}"
-    return msg	
+    return msg  
 
 
 
