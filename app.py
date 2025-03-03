@@ -40,13 +40,13 @@ def main():
     # First retrieve the information from the rag_context (if any)
     rag_context = retrieve(
         query=user_query,
-            session_id='miniproject_rag_5',
+            session_id='miniproject_rag_6',
             rag_threshold= 0.5,
             rag_k=2
     )
 
     # Combine query with rag
-    query = f"{user_query}\nCurrent rag_context (not web): {rag_context_string_simple(rag_context)}"
+    query = f"{user_query}\nCurrent rag_context (not web information): {rag_context_string_simple(rag_context)}"
 
     response = ""
     while True:
@@ -61,7 +61,7 @@ def main():
                 if decision:
                     response = text_upload(
                         text = json.dumps(summary),
-                        session_id = 'miniproject_rag_5',
+                        session_id = 'miniproject_rag_6',
                         strategy = 'fixed')
         else:
             break
@@ -87,14 +87,14 @@ def AI_Agent(query):
             information.
 
             The ouput of tool execution will be shared with you so you can decide
-            your next steps. If the user provides you with some urls and summaries. 
-            Choose the most appropriate url to use the get_page tool described
+            your next steps. If the user provides you with some urls and summaries, 
+            choose the most appropriate url to use the get_page tool described
             below, so that you can retrieve information from there.
-            If the user provides you with more information from the web, simply
-            answer the student's original query.
-            If you are still not able to answer the student's 
-            question accurately, tell him/her you are unable to do so and
-            suggest to get in touch with his/her advisor.
+            If the user provides you with more information from the web, extract
+            the important information and put it in a nice format to simply forward
+            the entire thing to the user. Summarize it a little bit.
+            If you still do not have relevant context to answer the user's query
+            after using the tools. Just strictly respond with $NO CONTEXT$.
 
             ### PROVIDED TOOLS INFORMATION ###
             ## 1. Tool to retrieve a list of urls from the web along with a 
