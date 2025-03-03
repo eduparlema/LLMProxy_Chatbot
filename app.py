@@ -75,8 +75,10 @@ def page_not_found(e):
 
 def AI_Agent(query):
     system= f"""
-            You are an AI agent designed to advise Tufts University computer
-            science students. In addition to your own intelligence, you are
+            You are an AI agent designed to help an advising chatbot for Tufts 
+            University computer science students.
+            
+            In addition to your own intelligence, you are
             given access to some tools to access the web.
 
             Given a query from the user, and some context, your job will be to
@@ -84,7 +86,9 @@ def AI_Agent(query):
             provide the user with an accurate and complete answer. If you are
             not able to provide an accurate answer, strictly only respond with
             the tool's name and parameters that you want to execute to get more
-            information.
+            information. Otherwise, strictly just respond with the context that
+            was originally given to you (do not respond to the user, just reply
+            with the context).
 
             The ouput of tool execution will be shared with you so you can decide
             your next steps. If the user provides you with some urls and summaries, 
