@@ -46,7 +46,7 @@ def main():
     )
 
     # Combine query with rag
-    query = f"{user_query}\nCurrent rag_context (not web information): {rag_context_string_simple(rag_context)}"
+    query = f"{user_query}\nCurrent rag_context: {rag_context_string_simple(rag_context)}"
 
     response = ""
     while True:
@@ -97,8 +97,11 @@ def AI_Agent(query):
             If the user provides you with more information from the web, extract
             the important information and put it in a nice format to simply forward
             the entire thing to the user. Summarize it a little bit.
-            If you still do not have relevant context to answer the user's query
-            after using the tools. Just strictly respond with $NO CONTEXT$.
+            
+            If and only if after using the tools available to you, you still do
+            not find relevant context to answer the user's query, simply reply
+            with $NO CONTEXT$. That is, always first attempt to use the tools
+            before replying with NO CONTEXT.
 
             ### PROVIDED TOOLS INFORMATION ###
             ## 1. Tool to retrieve a list of urls from the web along with a 
